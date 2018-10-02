@@ -1,7 +1,7 @@
 version: '2'
 services:
   mysqldb:
-    image: mysql:latest
+    image: mysql:5
     mem_limit: 1073741824
     restart: unless-stopped
     ports:
@@ -14,13 +14,13 @@ services:
       io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
 
   configserver:
-    image: anilallewar/basic-config-server:0.0.1
+    image: workingbit/basic-config-server
     mem_limit: 1073741824
     restart: unless-stopped
     ports:
       - "8888/tcp"
     command:
-      - while ! mysqladmin ping -h"mysqldb" -u"root" -p"password" --silent; do echo Waiting for mySql database to start; sleep 5; done; /app/run.sh
+    - while ! mysqladmin ping -h"mysqldb" -u"root" -p"password"; do echo Waiting for mySql database to start; sleep 5; done; /app/run.sh
     depends_on:
       - mysqldb
     labels:
@@ -44,7 +44,7 @@ services:
       io.rancher.container.pull_image: always
 
   authserver:
-    image: anilallewar/basic-auth-server:0.0.1
+    image: workingbit/basic-auth-server
     mem_limit: 1073741824
     restart: unless-stopped
     ports:
