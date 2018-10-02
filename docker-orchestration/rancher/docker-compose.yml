@@ -48,7 +48,7 @@ services:
     mem_limit: 1073741824
     restart: unless-stopped
     ports:
-      - "8899/tcp"
+    - "8899:8899/tcp"
     command:
       - while ! curl -s http://eurekaregistry:8761/health > /dev/null; do echo Waiting for Eureka Registry to start; sleep 5; done; /app/run.sh
     depends_on:
